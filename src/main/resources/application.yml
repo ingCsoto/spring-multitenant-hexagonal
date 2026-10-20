@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: catalog
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/catalog}
+    username: ${DB_USER:catalog}
+    password: ${DB_PASSWORD:catalog}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+  mvc:
+    problemdetails:
+      enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:http://localhost:8180/realms/catalog}
+
+server:
+  port: ${PORT:8080}
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
