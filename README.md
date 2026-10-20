@@ -11,29 +11,29 @@ A multi-tenant product catalog API in **Java 21 and Spring Boot 3.5**. It shows 
 
 ```mermaid
 flowchart LR
-    client([Client]) -->|Bearer JWT| sec
+    client(["Client"]) -->|"Bearer JWT"| sec
 
-    subgraph infrastructure
-        sec[SecurityConfig<br/>JWT + roles] --> tf[TenantFilter<br/>tenant_id claim]
-        tf --> web[ProductController]
-        repo[JpaProductRepositoryAdapter<br/>@TenantId entity]
+    subgraph infrastructure["infrastructure"]
+        sec["SecurityConfig<br/>JWT + roles"] --> tf["TenantFilter<br/>tenant_id claim"]
+        tf --> web["ProductController"]
+        repo["JpaProductRepositoryAdapter<br/>entity with TenantId"]
     end
 
-    subgraph application
-        svc[ProductService<br/>use cases]
+    subgraph application["application"]
+        svc["ProductService<br/>use cases"]
     end
 
-    subgraph domain
-        model[Product · Money]
-        port[[ProductRepository port]]
+    subgraph domain["domain"]
+        model["Product · Money"]
+        port[["ProductRepository port"]]
     end
 
-    web -->|ManageProducts port| svc
+    web -->|"ManageProducts port"| svc
     svc --> model
     svc --> port
-    repo -. implements .-> port
-    repo --> db[(PostgreSQL)]
-    kc[(Keycloak)] -. issues JWT .-> client
+    repo -.->|"implements"| port
+    repo --> db[("PostgreSQL")]
+    kc[("Keycloak")] -.->|"issues JWT"| client
 ```
 
 Dependencies point inwards only: `infrastructure → application → domain`.
